@@ -1,0 +1,8 @@
+clapping
+preclap
+Dapper
+Clapper
+Mic
+watchdog
+int
+ref
