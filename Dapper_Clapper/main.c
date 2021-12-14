@@ -42,6 +42,7 @@ int main(void)
     ADC12MCTL0 |= ADC12INCH_6 + ADC12SREF_1;
     ADC12IE |= ADC12IE0;
     ADC12IFG &= ~ADC12IFG0;
+    P1OUT &= ~BIT4;
 
     volatile unsigned int j;
     j = 0x30;
@@ -70,7 +71,6 @@ int main(void)
 //    TA0CTL |= TACLR;        /* Clears TAR and divider logic (divider settings unchanged. Automatically resets */
 //    TA1CTL |= MC_1;         /* start the timer */
 
-    P1OUT &= ~BIT4;
     ADC12CTL0 |= ADC12SC;
 
     __bis_SR_register(GIE); /* enable GIE to allow interrupts. */
