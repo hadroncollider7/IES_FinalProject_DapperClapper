@@ -26,8 +26,10 @@ int main(void)
 	P6SEL |= BIT6;                          /* ADC special function */
 	P2SEL |= BIT0;                          /* TA1.1 special function */
 	P2DIR |= BIT0;                          /* PWM output */
-	P1DIR |= BIT7+BIT5+BIT4+BIT3+BIT2;      /* configure ports as output */
+	P1DIR |= BIT5+BIT4+BIT3+BIT2;      /* configure ports as output */
+	P2DIR |= BIT2;
     P1OUT &= ~(BIT4 + BIT3 + BIT2);
+    P1OUT |= BIT5;
     P2OUT &= ~BIT2;
 
 	/*********************************************************************************
@@ -92,6 +94,10 @@ __interrupt void ADC12_ISR(void)
     {
         P2OUT |= BIT2;
         volatile unsigned int j;
+//        j = 0xFFFF;
+//        do j--;
+//        while (j != 0);
+
         switch(TA1CCR1)
         {
         case 0:
