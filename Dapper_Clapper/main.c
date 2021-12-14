@@ -24,6 +24,7 @@ int main(void)
 	P1SEL &= ~(BIT7+BIT5+BIT4+BIT3+BIT2);   /* GPIO */
 	P6SEL |= BIT6;                          /* ADC special function */
 	P2SEL |= BIT0;                          /* TA1.1 special function */
+	P2DIR |= BIT0;                          /* PWM output */
 	P1DIR |= BIT7+BIT5+BIT4+BIT3+BIT2;      /* configure ports as output */
 
 	/*********************************************************************************
@@ -58,19 +59,17 @@ int main(void)
      * Output mode 7: reset/set
      * Make sure to start the fan OFF
      *********************************************************************************/
-//    TA1CTL |= TAIE + TASSEL_2;
-//    TA1CCTL0 |= CCIE + OUTMOD_7;
-//    TA1CCTL0 &= ~CCIFG;
-//    TA1CCR0 = 0x31;     /* CCR0 = 49 */
-//    TA1CCR1 = 0x00;     /* CCR1 = 0. The fan is off */
+    TA1CTL |= TASSEL_2;
+    TA1CCTL0 &= ~CCIFG;
+    TA1CCR0 = 511;     /* CCR0 = 49 */
+    TA1CCTL1 |= OUTMOD_7;
+    TA1CCR1 = 512;
 
     /*********************************************************************************
      * START THE ADC AND TIMER
      *********************************************************************************/
     ADC12CTL0 |= ADC12ENC;  /* enable ADC12 conversion */
-//    TA0CTL |= TACLR;        /* Clears TAR and divider logic (divider settings unchanged. Automatically resets */
-//    TA1CTL |= MC_1;         /* start the timer */
-
+    TA1CTL |= MC_1 + TACLR;         /* start the timer */
     ADC12CTL0 |= ADC12SC;
 
     __bis_SR_register(GIE); /* enable GIE to allow interrupts. */
@@ -90,9 +89,9 @@ __interrupt void ADC12_ISR(void)
     if (ADC12MEM0 >= 0x0AAA)
     {
         P1OUT ^= BIT4;      /* toggle mode 1 LED */
-        //        TA1CCR1 = 44;
+        TA1CCR1 = 100;
         volatile unsigned int j;
-        j = 0xFFFF;
+        j = 0x4CCC;
         do j--;
         while (j != 0);
     }
