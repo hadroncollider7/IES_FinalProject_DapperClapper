@@ -61,9 +61,9 @@ int main(void)
      *********************************************************************************/
     TA1CTL |= TASSEL_2;
     TA1CCTL0 &= ~CCIFG;
-    TA1CCR0 = 511;     /* CCR0 = 49 */
+    TA1CCR0 = 49;     /* CCR0 = 49 */
     TA1CCTL1 |= OUTMOD_7;
-    TA1CCR1 = 512;
+    TA1CCR1 = 50;
 
     /*********************************************************************************
      * START THE ADC AND TIMER
@@ -89,9 +89,9 @@ __interrupt void ADC12_ISR(void)
     if (ADC12MEM0 >= 0x0AAA)
     {
         P1OUT ^= BIT4;      /* toggle mode 1 LED */
-        TA1CCR1 = 100;
+        TA1CCR1 = 5;
         volatile unsigned int j;
-        j = 0x4CCC;
+        j = 0xFFFF;
         do j--;
         while (j != 0);
     }
