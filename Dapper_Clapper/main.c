@@ -31,6 +31,7 @@ int main(void)
     P1OUT &= ~(BIT4 + BIT3 + BIT2);
     P1OUT |= BIT5;
     P2OUT &= ~BIT2;
+    P2DS |= BIT0;           /* Full drive strength for PWM output */
 
 	/*********************************************************************************
 	 * CONFIGURE ADC12
