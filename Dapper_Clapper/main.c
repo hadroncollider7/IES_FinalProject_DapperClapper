@@ -116,31 +116,31 @@ __interrupt void ADC12_ISR(void)
             while (j != 0);
 
             break;
-        case 7:
+        case 12:
             /* MODE 2 (FULL POWAHHHH!!) */
              P1OUT &= ~BIT4;              /* configure LEDs */
              P1OUT |= BIT3;
              P1OUT &= ~BIT2;
              P1OUT &= ~BIT5;
-             TA1CCR1 = 8;               /* 64 % duty cycle */
+             TA1CCR1 = 13;               /* 64 % duty cycle */
              /* delay for stability */
              j = 0xFFFF;
              do j--;
              while (j != 0);
              break;
-        case 8:
+        case 13:
             /* MODE 3 (THAT WASN'T EVEN MY FINAL FORM!!!) */
              P1OUT &= ~BIT4;              /* configure LEDs */
              P1OUT &= ~BIT3;
              P1OUT |= BIT2;
              P1OUT &= ~BIT5;
-             TA1CCR1 = 9;               /* 99.9 % duty cycle */
+             TA1CCR1 = 14;               /* 99.9 % duty cycle */
              /* delay for stability */
              j = 0xFFFF;
              do j--;
              while (j != 0);
              break;
-        case 9:
+        case 14:
             /* MODE 0 (HUMAN MODE) */
              P1OUT &= ~BIT4;              /* configure LEDs */
              P1OUT &= ~BIT3;
