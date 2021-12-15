@@ -26,6 +26,7 @@ int main(void)
 	P6SEL |= BIT6;                          /* ADC special function */
 	P2SEL |= BIT0;                          /* TA1.1 special function */
 	P2DIR |= BIT0;                          /* PWM output */
+//	P2DS |= BIT0;                       /* full output drive strength */
 	P1DIR |= BIT5+BIT4+BIT3+BIT2;      /* configure ports as output */
 	P2DIR |= BIT2;
     P1OUT &= ~(BIT4 + BIT3 + BIT2);
@@ -66,7 +67,7 @@ int main(void)
      *********************************************************************************/
     TA1CTL |= TASSEL_2;
     TA1CCTL0 &= ~CCIFG;
-    TA1CCR0 = 49;     /* CCR0 = 49 */
+    TA1CCR0 = 20;     /* CCR0 = 49 */
     TA1CCTL1 |= OUTMOD_7;
     TA1CCR1 = 0;
 
@@ -85,7 +86,7 @@ int main(void)
 
 /*********************************************************************************
  * ADC12 INTERRUPT SERVICE ROUTINE
- * Cutoff voltage: 80 mV, NADC = 0x83
+ * Cutoff voltage:  1 V, NADC = 0x0AAA
  *********************************************************************************/
 #pragma vector = ADC12_VECTOR
 __interrupt void ADC12_ISR(void)
@@ -99,6 +100,7 @@ __interrupt void ADC12_ISR(void)
 //        do j--;
 //        while (j != 0);
 
+
         switch(TA1CCR1)
         {
         case 0:
@@ -107,37 +109,38 @@ __interrupt void ADC12_ISR(void)
             P1OUT &= ~BIT3;
             P1OUT &= ~BIT2;
             P1OUT &= ~BIT5;
-            TA1CCR1 = 16;               /* 32 % duty cycle */
+            TA1CCR1 = 4;               /* 32 % duty cycle */
             /* delay for stability */
             j = 0xFFFF;
             do j--;
             while (j != 0);
+
             break;
-        case 16:
+        case 4:
             /* MODE 2 (FULL POWAHHHH!!) */
              P1OUT &= ~BIT4;              /* configure LEDs */
              P1OUT |= BIT3;
              P1OUT &= ~BIT2;
              P1OUT &= ~BIT5;
-             TA1CCR1 = 32;               /* 64 % duty cycle */
+             TA1CCR1 = 5;               /* 64 % duty cycle */
              /* delay for stability */
              j = 0xFFFF;
              do j--;
              while (j != 0);
              break;
-        case 32:
+        case 5:
             /* MODE 3 (THAT WASN'T EVEN MY FINAL FORM!!!) */
              P1OUT &= ~BIT4;              /* configure LEDs */
              P1OUT &= ~BIT3;
              P1OUT |= BIT2;
              P1OUT &= ~BIT5;
-             TA1CCR1 = 50;               /* 99.9 % duty cycle */
+             TA1CCR1 = 6;               /* 99.9 % duty cycle */
              /* delay for stability */
              j = 0xFFFF;
              do j--;
              while (j != 0);
              break;
-        case 50:
+        case 6:
             /* MODE 0 (HUMAN MODE) */
              P1OUT &= ~BIT4;              /* configure LEDs */
              P1OUT &= ~BIT3;
