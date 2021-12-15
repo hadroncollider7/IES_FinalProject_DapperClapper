@@ -26,6 +26,7 @@ int main(void)
 	P6SEL |= BIT6;                          /* ADC special function */
 	P2SEL |= BIT0;                          /* TA1.1 special function */
 	P2DIR |= BIT0;                          /* PWM output */
+//	P2DS |= BIT0;                       /* full output drive strength */
 	P1DIR |= BIT5+BIT4+BIT3+BIT2;      /* configure ports as output */
 	P2DIR |= BIT2;
     P1OUT &= ~(BIT4 + BIT3 + BIT2);
@@ -84,7 +85,7 @@ int main(void)
 
 /*********************************************************************************
  * ADC12 INTERRUPT SERVICE ROUTINE
- * Cutoff voltage: 80 mV, NADC = 0x83
+ * Cutoff voltage:  1 V, NADC = 0x0AAA
  *********************************************************************************/
 #pragma vector = ADC12_VECTOR
 __interrupt void ADC12_ISR(void)
@@ -97,6 +98,7 @@ __interrupt void ADC12_ISR(void)
 //        j = 0xFFFF;
 //        do j--;
 //        while (j != 0);
+
 
         switch(TA1CCR1)
         {
@@ -111,6 +113,7 @@ __interrupt void ADC12_ISR(void)
             j = 0xFFFF;
             do j--;
             while (j != 0);
+
             break;
         case 16:
             /* MODE 2 (FULL POWAHHHH!!) */
