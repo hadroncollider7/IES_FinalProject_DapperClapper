@@ -66,7 +66,7 @@ int main(void)
      *********************************************************************************/
     TA1CTL |= TASSEL_2;
     TA1CCTL0 &= ~CCIFG;
-    TA1CCR0 = 49;     /* CCR0 = 49 */
+    TA1CCR0 = 20;     /* CCR0 = 49 */
     TA1CCTL1 |= OUTMOD_7;
     TA1CCR1 = 0;
 
@@ -108,38 +108,38 @@ __interrupt void ADC12_ISR(void)
             P1OUT &= ~BIT3;
             P1OUT &= ~BIT2;
             P1OUT &= ~BIT5;
-            TA1CCR1 = 16;               /* 32 % duty cycle */
+            TA1CCR1 = 4;               /* 32 % duty cycle */
             /* delay for stability */
             j = 0xFFFF;
             do j--;
             while (j != 0);
 
             break;
-        case 16:
+        case 4:
             /* MODE 2 (FULL POWAHHHH!!) */
              P1OUT &= ~BIT4;              /* configure LEDs */
              P1OUT |= BIT3;
              P1OUT &= ~BIT2;
              P1OUT &= ~BIT5;
-             TA1CCR1 = 32;               /* 64 % duty cycle */
+             TA1CCR1 = 5;               /* 64 % duty cycle */
              /* delay for stability */
              j = 0xFFFF;
              do j--;
              while (j != 0);
              break;
-        case 32:
+        case 5:
             /* MODE 3 (THAT WASN'T EVEN MY FINAL FORM!!!) */
              P1OUT &= ~BIT4;              /* configure LEDs */
              P1OUT &= ~BIT3;
              P1OUT |= BIT2;
              P1OUT &= ~BIT5;
-             TA1CCR1 = 50;               /* 99.9 % duty cycle */
+             TA1CCR1 = 6;               /* 99.9 % duty cycle */
              /* delay for stability */
              j = 0xFFFF;
              do j--;
              while (j != 0);
              break;
-        case 50:
+        case 6:
             /* MODE 0 (HUMAN MODE) */
              P1OUT &= ~BIT4;              /* configure LEDs */
              P1OUT &= ~BIT3;
