@@ -26,7 +26,6 @@ int main(void)
 	P6SEL |= BIT6;                          /* ADC special function */
 	P2SEL |= BIT0;                          /* TA1.1 special function */
 	P2DIR |= BIT0;                          /* PWM output */
-//	P2DS |= BIT0;                       /* full output drive strength */
 	P1DIR |= BIT5+BIT4+BIT3+BIT2;      /* configure ports as output */
 	P2DIR |= BIT2;
     P1OUT &= ~(BIT4 + BIT3 + BIT2);
@@ -60,26 +59,26 @@ int main(void)
      * CONFIGURE TIMER TA1.1
      * Note: The PWM frequency needs to be at least 20 KHz to drive the motor.
      * Clock: SMCKL (1.048576 MHz)
-     * TAR counts: 50
-     * frequency_PWM: 20.9715 KHz
+     * TAR counts: 40
+     * frequency_PWM: 26.2144 KHz
      * Output mode 7: reset/set
-     * Make sure to start the fan OFF
+     * Make sure to start the fan OFF and clear the blades.
      *********************************************************************************/
     TA1CTL |= TASSEL_2;
     TA1CCTL0 &= ~CCIFG;
-    TA1CCR0 = 40;     /* CCR0 = 49 */
+    TA1CCR0 = 39;     /* PWM period in counts: 40 counts */
     TA1CCTL1 |= OUTMOD_7;
-    TA1CCR1 = 0;
+    TA1CCR1 = 0;      /* CCR1 is the duty cycle */
 
     /*********************************************************************************
      * START THE ADC AND TIMER
      *********************************************************************************/
-    ADC12CTL0 |= ADC12ENC;  /* enable ADC12 conversion */
+    ADC12CTL0 |= ADC12ENC;          /* enable ADC12 conversion */
     TA1CTL |= MC_1 + TACLR;         /* start the timer */
     ADC12CTL0 |= ADC12SC;
 
-    __bis_SR_register(GIE); /* enable GIE to allow interrupts. */
-    __no_operation();         /* set breakpoint for debugging */
+    __bis_SR_register(GIE);     /* enable GIE to allow interrupts. */
+    __no_operation();           /* set breakpoint for debugging */
 
     while(1);
 }
@@ -109,7 +108,7 @@ __interrupt void ADC12_ISR(void)
             P1OUT &= ~BIT3;
             P1OUT &= ~BIT2;
             P1OUT &= ~BIT5;
-            TA1CCR1 = 12;               /* 32 % duty cycle */
+            TA1CCR1 = 12;               /* 30 % duty cycle */
             /* delay for stability */
             j = 0xFFFF;
             do j--;
@@ -122,7 +121,7 @@ __interrupt void ADC12_ISR(void)
              P1OUT |= BIT3;
              P1OUT &= ~BIT2;
              P1OUT &= ~BIT5;
-             TA1CCR1 = 13;               /* 64 % duty cycle */
+             TA1CCR1 = 13;               /* 32.5 % duty cycle */
              /* delay for stability */
              j = 0xFFFF;
              do j--;
@@ -134,7 +133,7 @@ __interrupt void ADC12_ISR(void)
              P1OUT &= ~BIT3;
              P1OUT |= BIT2;
              P1OUT &= ~BIT5;
-             TA1CCR1 = 14;               /* 99.9 % duty cycle */
+             TA1CCR1 = 14;               /* 35 % duty cycle */
              /* delay for stability */
              j = 0xFFFF;
              do j--;
